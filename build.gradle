@@ -1,4 +1,16 @@
-ext {
-    group = 'info.vividcode.jdbi'
-    version = '1.0-SNAPSHOT'
+buildscript {
+    ext {
+        group = 'info.vividcode.jdbi'
+        version = '1.0-SNAPSHOT'
+
+        junitVersion = '5.0.0-M3'
+        junitGradlePluginVersion = '1.0.0-M3'
+    }
+
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath "org.junit.platform:junit-platform-gradle-plugin:${rootProject.ext.junitGradlePluginVersion}"
+    }
 }
