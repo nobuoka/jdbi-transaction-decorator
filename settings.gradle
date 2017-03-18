@@ -1,0 +1,3 @@
+rootProject.name = 'jdbi-transaction-decorator'
+include 'transaction-decorator-api'
+include 'transaction-decorator-jdbi'

@@ -1,0 +1,4 @@
+ext {
+    group = 'info.vividcode.jdbi'
+    version = '1.0-SNAPSHOT'
+}
