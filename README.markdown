@@ -1,6 +1,8 @@
 jdbi-transaction-decorator
 ==============================
 
+[![CircleCI](https://circleci.com/gh/nobuoka/jdbi-transaction-decorator.svg?style=svg)](https://circleci.com/gh/nobuoka/jdbi-transaction-decorator)
+
 ## License
 
 ```

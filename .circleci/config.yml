@@ -1,0 +1,43 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/project
+    docker:
+      - image: openjdk:8
+    steps:
+      - checkout
+      - run:
+          name: Calculate cache key sources
+          command: |
+              {
+                echo 'v1' # Change this string to invalidate cache forcely
+                md5sum gradle/wrapper/gradle-wrapper.properties
+                # Gradle plugins (e.g. build-info-extractor-gradle) may use ~/.gradle directory
+                md5sum build.gradle
+                md5sum */build.gradle
+              } > ~/cache-key-source-gradle
+              {
+                echo 'v1' # Change this string to invalidate cache forcely
+                md5sum build.gradle
+                md5sum */build.gradle
+              } > ~/cache-key-source-m2-deps
+      - restore_cache:
+          key: gradle-{{ checksum "~/cache-key-source-gradle" }}
+      - restore_cache:
+          key: m2-{{ checksum "~/cache-key-source-m2-deps" }}
+      - run: ./gradlew test
+      - store_test_results:
+          path: transaction-decorator-jdbi/build/test-results/junit-platform
+      - save_cache:
+          key: m2-{{ checksum "~/cache-key-source-m2-deps" }}
+          paths:
+            - ~/.m2
+      - save_cache:
+          key: gradle-{{ checksum "~/cache-key-source-gradle" }}
+          paths:
+            - ~/.gradle
+      - deploy:
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              ./gradlew artifactoryPublish
+            fi

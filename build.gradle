@@ -26,15 +26,16 @@ def releaseProperties = [
 ]
 
 artifactory {
+    Map<String, String> env = System.getenv();
     String artifactoryContextUrl = project.hasProperty('artifactory_contextUrl') ?
             project.property('artifactory_contextUrl') :
-            System.getenv('ARTIFACTORY_CONTEXT_URL')
+            env.getOrDefault('ARTIFACTORY_CONTEXT_URL', 'ARTIFACTORY-CONTEXT-URL-NOT-SPECIFIED')
     String artifactoryUser = project.hasProperty('artifactory_user') ?
             project.property('artifactory_user') :
-            System.getenv('ARTIFACTORY_USER')
+            env.getOrDefault('ARTIFACTORY_USER', 'ARTIFACTORY-USER-NOT-SPECIFIED')
     String artifactoryPassword = project.hasProperty('artifactory_password') ?
             project.property('artifactory_password') :
-            System.getenv('ARTIFACTORY_PASSWORD')
+            env.getOrDefault('ARTIFACTORY_PASSWORD', 'ARTIFACTORY-PASSWORD-NOT-SPECIFIED')
 
     contextUrl = artifactoryContextUrl
     publish {
