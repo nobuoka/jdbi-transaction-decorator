@@ -1,4 +1,10 @@
+evaluationDependsOn(parent.path)
+
 apply plugin: 'org.junit.platform.gradle.plugin'
+
+ext {
+    artifactIdSuffix = 'jdbi'
+}
 
 group rootProject.ext.group
 version rootProject.ext.version

@@ -1,7 +1,7 @@
 buildscript {
     ext {
         group = 'info.vividcode.jdbi'
-        version = '1.0-SNAPSHOT'
+        version = '0.1.0-SNAPSHOT'
 
         junitVersion = '5.0.0-M3'
         junitGradlePluginVersion = '1.0.0-M3'
@@ -12,5 +12,77 @@ buildscript {
     }
     dependencies {
         classpath "org.junit.platform:junit-platform-gradle-plugin:${rootProject.ext.junitGradlePluginVersion}"
+        classpath 'org.jfrog.buildinfo:build-info-extractor-gradle:4.+'
+    }
+}
+
+allprojects {
+    apply plugin: 'com.jfrog.artifactory'
+    artifactoryPublish.skip = true
+}
+
+def releaseProperties = [
+        artifactIdBase : 'transaction-decorator',
+]
+
+artifactory {
+    String artifactoryContextUrl = project.hasProperty('artifactory_contextUrl') ?
+            project.property('artifactory_contextUrl') :
+            System.getenv('ARTIFACTORY_CONTEXT_URL')
+    String artifactoryUser = project.hasProperty('artifactory_user') ?
+            project.property('artifactory_user') :
+            System.getenv('ARTIFACTORY_USER')
+    String artifactoryPassword = project.hasProperty('artifactory_password') ?
+            project.property('artifactory_password') :
+            System.getenv('ARTIFACTORY_PASSWORD')
+
+    contextUrl = artifactoryContextUrl
+    publish {
+        repository {
+            repoKey = 'oss-snapshot-local'
+            username = artifactoryUser
+            password = artifactoryPassword
+            maven = true
+        }
+    }
+    resolve {
+        repository {
+            repoKey = 'jcenter'
+        }
+    }
+}
+
+childProjects.each {
+    it.value.afterEvaluate { childProject ->
+        childProject.apply plugin: 'maven-publish'
+
+        childProject.task('sourceJar', type: Jar) {
+            from childProject.sourceSets.main.allJava
+        }
+        childProject.task('javadocJar', type: Jar) {
+            from childProject.javadoc
+        }
+
+        String artifactIdSuffix = childProject.ext.has('artifactIdSuffix') ? "-${childProject.ext.get('artifactIdSuffix')}" : ''
+        childProject.publishing {
+            publications {
+                mavenJava(MavenPublication) {
+                    from childProject.components.java
+                    artifact childProject.tasks.sourceJar {
+                        classifier 'sources'
+                    }
+                    artifact childProject.tasks.javadocJar {
+                        classifier 'javadoc'
+                    }
+
+                    artifactId "${releaseProperties.artifactIdBase}${artifactIdSuffix}"
+                }
+            }
+        }
+
+        childProject.artifactoryPublish {
+            skip = false
+            publications(childProject.publishing.publications.mavenJava)
+        }
     }
 }
