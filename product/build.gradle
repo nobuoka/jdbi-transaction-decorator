@@ -1,0 +1,79 @@
+apply plugin: 'com.jfrog.artifactory'
+artifactoryPublish.skip = true
+
+def releaseProperties = [
+        artifactIdBase : 'transaction-decorator',
+]
+
+artifactory {
+    Map<String, String> env = System.getenv();
+    String artifactoryContextUrl = project.hasProperty('artifactory_contextUrl') ?
+            project.property('artifactory_contextUrl') :
+            env.getOrDefault('ARTIFACTORY_CONTEXT_URL', 'ARTIFACTORY-CONTEXT-URL-NOT-SPECIFIED')
+    String artifactoryUser = project.hasProperty('artifactory_user') ?
+            project.property('artifactory_user') :
+            env.getOrDefault('ARTIFACTORY_USER', 'ARTIFACTORY-USER-NOT-SPECIFIED')
+    String artifactoryPassword = project.hasProperty('artifactory_password') ?
+            project.property('artifactory_password') :
+            env.getOrDefault('ARTIFACTORY_PASSWORD', 'ARTIFACTORY-PASSWORD-NOT-SPECIFIED')
+
+    contextUrl = artifactoryContextUrl
+    publish {
+        repository {
+            repoKey = 'oss-snapshot-local'
+            username = artifactoryUser
+            password = artifactoryPassword
+            maven = true
+        }
+    }
+    resolve {
+        repository {
+            repoKey = 'jcenter'
+        }
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven-publish'
+    apply plugin: 'com.jfrog.artifactory'
+
+    group rootProject.ext.group
+    version rootProject.ext.version
+
+    sourceCompatibility = 1.8
+
+    repositories {
+        mavenCentral()
+    }
+
+    afterEvaluate { project ->
+        project.task('sourceJar', type: Jar) {
+            from project.sourceSets.main.allJava
+        }
+        project.task('javadocJar', type: Jar) {
+            from project.javadoc
+        }
+
+        project.publishing {
+            publications {
+                mavenJava(MavenPublication) {
+                    from project.components.java
+                    artifact project.tasks.sourceJar {
+                        classifier 'sources'
+                    }
+                    artifact project.tasks.javadocJar {
+                        classifier 'javadoc'
+                    }
+
+                    String artifactIdSuffix = project.ext.has('artifactIdSuffix') ? "-${project.ext.get('artifactIdSuffix')}" : ''
+                    artifactId "${releaseProperties.artifactIdBase}${artifactIdSuffix}"
+                }
+            }
+        }
+
+        project.artifactoryPublish {
+            publications(project.publishing.publications.mavenJava)
+        }
+    }
+}

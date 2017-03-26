@@ -1,0 +1,7 @@
+buildscript {
+    ext {
+        artifactIdSuffix = 'api'
+    }
+}
+
+evaluationDependsOn(parent.path)

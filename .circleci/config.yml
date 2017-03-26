@@ -13,21 +13,19 @@ jobs:
                 echo 'v1' # Change this string to invalidate cache forcely
                 md5sum gradle/wrapper/gradle-wrapper.properties
                 # Gradle plugins (e.g. build-info-extractor-gradle) may use ~/.gradle directory
-                md5sum build.gradle
-                md5sum */build.gradle
+                md5sum $(find . -name 'build.gradle')
               } > ~/cache-key-source-gradle
               {
                 echo 'v1' # Change this string to invalidate cache forcely
-                md5sum build.gradle
-                md5sum */build.gradle
+                md5sum $(find . -name 'build.gradle')
               } > ~/cache-key-source-m2-deps
       - restore_cache:
           key: gradle-{{ checksum "~/cache-key-source-gradle" }}
       - restore_cache:
           key: m2-{{ checksum "~/cache-key-source-m2-deps" }}
-      - run: ./gradlew test
+      - run: ./gradlew check
       - store_test_results:
-          path: transaction-decorator-jdbi/build/test-results/junit-platform
+          path: product/jdbi/build/test-results/junit-platform
       - save_cache:
           key: m2-{{ checksum "~/cache-key-source-m2-deps" }}
           paths:
