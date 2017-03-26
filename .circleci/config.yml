@@ -39,3 +39,8 @@ jobs:
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
               ./gradlew artifactoryPublish
             fi
+      - deploy:
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "release" ]; then
+              ./gradlew -P release bintrayUpload
+            fi

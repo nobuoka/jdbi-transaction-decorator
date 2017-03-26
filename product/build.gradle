@@ -1,28 +1,38 @@
 apply plugin: 'com.jfrog.artifactory'
 artifactoryPublish.skip = true
 
+Map<String, String> env = System.getenv()
 def releaseProperties = [
         artifactIdBase : 'transaction-decorator',
+        vcsUrl : 'https://github.com/nobuoka/ComponentsRecyclerAdapter',
+
+        artifactoryContextUrl : project.hasProperty('artifactory_contextUrl') ?
+                project.property('artifactory_contextUrl') :
+                env.getOrDefault('ARTIFACTORY_CONTEXT_URL', 'ARTIFACTORY-CONTEXT-URL-NOT-SPECIFIED'),
+        artifactoryUser : project.hasProperty('artifactory_user') ?
+                project.property('artifactory_user') :
+                env.getOrDefault('ARTIFACTORY_USER', 'ARTIFACTORY-USER-NOT-SPECIFIED'),
+        artifactoryPassword : project.hasProperty('artifactory_password') ?
+                project.property('artifactory_password') :
+                env.getOrDefault('ARTIFACTORY_PASSWORD', 'ARTIFACTORY-PASSWORD-NOT-SPECIFIED'),
+        bintrayRepo : 'maven',
+        bintrayPackageName : 'jdbi-transaction-decorator',
+        bintrayPackageVersion : rootProject.ext.version,
+        bintrayUser : project.hasProperty('bintray_user') ?
+                project.property('bintray_user') :
+                env.getOrDefault('BINTRAY_USER', 'BINTRAY-USER-NOT-SPECIFIED'),
+        bintrayKey : project.hasProperty('bintray_key') ?
+                project.property('bintray_key') :
+                env.getOrDefault('BINTRAY_KEY', 'BINTRAY-KEY-NOT-SPECIFIED'),
 ]
 
 artifactory {
-    Map<String, String> env = System.getenv();
-    String artifactoryContextUrl = project.hasProperty('artifactory_contextUrl') ?
-            project.property('artifactory_contextUrl') :
-            env.getOrDefault('ARTIFACTORY_CONTEXT_URL', 'ARTIFACTORY-CONTEXT-URL-NOT-SPECIFIED')
-    String artifactoryUser = project.hasProperty('artifactory_user') ?
-            project.property('artifactory_user') :
-            env.getOrDefault('ARTIFACTORY_USER', 'ARTIFACTORY-USER-NOT-SPECIFIED')
-    String artifactoryPassword = project.hasProperty('artifactory_password') ?
-            project.property('artifactory_password') :
-            env.getOrDefault('ARTIFACTORY_PASSWORD', 'ARTIFACTORY-PASSWORD-NOT-SPECIFIED')
-
-    contextUrl = artifactoryContextUrl
+    contextUrl = releaseProperties.artifactoryContextUrl
     publish {
         repository {
             repoKey = 'oss-snapshot-local'
-            username = artifactoryUser
-            password = artifactoryPassword
+            username = releaseProperties.artifactoryUser
+            password = releaseProperties.artifactoryPassword
             maven = true
         }
     }
@@ -37,6 +47,7 @@ subprojects {
     apply plugin: 'java'
     apply plugin: 'maven-publish'
     apply plugin: 'com.jfrog.artifactory'
+    apply plugin: 'com.jfrog.bintray'
 
     group rootProject.ext.group
     version rootProject.ext.version
@@ -74,6 +85,21 @@ subprojects {
 
         project.artifactoryPublish {
             publications(project.publishing.publications.mavenJava)
+        }
+
+        project.bintray {
+            user = releaseProperties.bintrayUser
+            key = releaseProperties.bintrayKey
+            publications = ['mavenJava']
+            pkg {
+                repo = releaseProperties.bintrayRepo
+                name = releaseProperties.bintrayPackageName
+                licenses = ['Apache-2.0']
+                vcsUrl = releaseProperties.vcsUrl
+                version {
+                    name = releaseProperties.bintrayPackageVersion
+                }
+            }
         }
     }
 }
