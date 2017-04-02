@@ -39,7 +39,7 @@ public interface TestService {
 
 // Implementation
 class TestServiceImpl implements TestService {
-  @MyTransactional
+  @MyTransaction
   public void doSomething() {
     // Do something
   }
@@ -93,7 +93,7 @@ To enable `Transaction` annotation of jDBI, application service must depends on 
 must be instantiated by jDBI.
 
 ```java
-public abstrace class TestService {
+public abstract class TestService {
   @CreateSqlObject
   TestDao createTestDao();
 
