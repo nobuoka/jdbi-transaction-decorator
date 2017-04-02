@@ -3,7 +3,7 @@ jdbi-transaction-decorator
 
 [![CircleCI](https://circleci.com/gh/nobuoka/jdbi-transaction-decorator.svg?style=svg)](https://circleci.com/gh/nobuoka/jdbi-transaction-decorator)
 
-This library helps you to make transactional-annotated methods of your application's application layer independent to jDBI.
+This library helps you to make transactional-annotated methods of your application's application layer independent to [jDBI](https://github.com/jdbi/jdbi).
 This is useful for accomplishing the Dependency Inversion Pattern (DIP).
 
 [![Relationships between modules](https://docs.google.com/drawings/d/1kWVQmiDOhil6JYkIQ-dYVtpHq1ur335qpewzjrWMsXw/pub?w=471&amp;h=363)](https://docs.google.com/drawings/d/1kWVQmiDOhil6JYkIQ-dYVtpHq1ur335qpewzjrWMsXw/edit?usp=sharing)
