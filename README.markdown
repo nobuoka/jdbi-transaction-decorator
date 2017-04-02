@@ -1,6 +1,7 @@
 jdbi-transaction-decorator
 ==============================
 
+[![Download](https://api.bintray.com/packages/nobuoka/maven/jdbi-transaction-decorator/images/download.svg)](https://bintray.com/nobuoka/maven/jdbi-transaction-decorator/_latestVersion)
 [![CircleCI](https://circleci.com/gh/nobuoka/jdbi-transaction-decorator.svg?style=svg)](https://circleci.com/gh/nobuoka/jdbi-transaction-decorator)
 
 This library helps you to make transactional-annotated methods of your application's application layer independent to [jDBI](https://github.com/jdbi/jdbi).
