@@ -22,6 +22,11 @@ import org.skife.jdbi.v2.sqlobject.mixins.Transactional;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Proxy;
 
+/**
+ * Implementation of {@link TransactionDecorator}, which works along with jDBI.
+ *
+ * @param <S> Type of jDBI SQL object which implements {@link Transactional} interface.
+ */
 public class JdbiTransactionDecorator<S extends Transactional<S>> implements TransactionDecorator {
 
     private final S transactionalSqlObject;

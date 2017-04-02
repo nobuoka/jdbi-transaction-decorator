@@ -4,10 +4,16 @@ jdbi-transaction-decorator
 [![CircleCI](https://circleci.com/gh/nobuoka/jdbi-transaction-decorator.svg?style=svg)](https://circleci.com/gh/nobuoka/jdbi-transaction-decorator)
 
 This library helps you to make transactional-annotated methods of your application's application layer independent to jDBI.
+This is useful for accomplishing the Dependency Inversion Pattern (DIP).
 
-## Library modules
+[![Relationships between modules](https://docs.google.com/drawings/d/1kWVQmiDOhil6JYkIQ-dYVtpHq1ur335qpewzjrWMsXw/pub?w=471&amp;h=363)](https://docs.google.com/drawings/d/1kWVQmiDOhil6JYkIQ-dYVtpHq1ur335qpewzjrWMsXw/edit?usp=sharing)
 
-This library has two modules.
+Application layer provides application services which have methods annotated to represent the method should be executed in transaction.
+The `transaction-decorator-jdbi` modules provides feature to decorate application services so that the annotated methods are executed in transaction.
+
+## Modules
+
+This library is composed of two modules.
 
 * `info.vividcode.jdbi:transaction-decorator-api` : provides interface of `TransactionDecorator`.
   * Typically used by application layer.
