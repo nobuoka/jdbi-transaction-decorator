@@ -79,7 +79,7 @@ TransactionDecorator transactionDecorator = new JdbiTransactionDecorator(sqlObje
 ## Demo
 
 This project contains the demo as sub project.
-See [README of demo project](./demo/README.markdown).
+See [demo project](./demo/).
 
 ## Why not using the `Transaction` annotation of jDBI directory?
 
