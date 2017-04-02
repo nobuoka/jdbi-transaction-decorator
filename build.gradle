@@ -1,7 +1,7 @@
 buildscript {
     ext {
         group = 'info.vividcode.jdbi'
-        version = '0.8.0' + (project.hasProperty('release') ? '' : '-SNAPSHOT')
+        version = '0.9.0' + (project.hasProperty('release') ? '' : '-SNAPSHOT')
 
         junitVersion = '5.0.0-M4'
         junitGradlePluginVersion = '1.0.0-M4'
