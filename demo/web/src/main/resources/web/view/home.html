@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>デモ</title>
+</head>
+<body>
+<h1>デモ</h1>
+
+<h2>ダッシュボード</h2>
+<div>
+    <div>更新回数 : <span class="update-count">???</span> 回</div>
+    <div>最後のメッセージ : <span class="last-message">???</span></div>
+</div>
+
+<h2>追加</h2>
+<form class="input-form">
+    <label><span>メッセージ</span> : <input type="text" class="input-message"></label>
+    <input type="submit">
+</form>
+
+<script>
+    function sendRequest(requestMethod, url, content, callback) {
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (this.readyState === 4) {
+                if (200 <= this.status && this.status < 300) {
+                    console.log(this);
+                    callback(this.response);
+                } else if (400 <= this.status) {
+                    alert("エラーが発生しました : " + this);
+                }
+            }
+        }
+        xhr.open(requestMethod, url, true);
+        xhr.responseType = 'json';
+        xhr.send(content);
+    }
+
+    function updateDashboard() {
+        sendRequest('GET', '/dashboard', null, function (dashboard) {
+            document.querySelector('.update-count').textContent = dashboard["updateCount"];
+            document.querySelector('.last-message').textContent = dashboard["message"];
+        });
+    }
+
+    function requestToUpdateMessage() {
+        var messageInputElem = document.querySelector('.input-message');
+        var message = messageInputElem.value;
+        sendRequest('POST', '/updateMessage', message, function () {
+            messageInputElem.value = '';
+            updateDashboard();
+        });
+    }
+
+    updateDashboard();
+    document.querySelector('.input-form').addEventListener('submit', function (evt) {
+        evt.preventDefault();
+        requestToUpdateMessage();
+    });
+  </script>
+
+</body>
+</html>

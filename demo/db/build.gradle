@@ -1,0 +1,11 @@
+dependencies {
+    compile project(':demo:core')
+
+    compile 'info.vividcode.jdbi:transaction-decorator-jdbi:0.1.0-SNAPSHOT'
+    compile "io.dropwizard:dropwizard-jdbi:${dropwizard_version}"
+
+    testCompile "org.junit.jupiter:junit-jupiter-api:${rootProject.ext.junitVersion}"
+    testRuntime "org.junit.jupiter:junit-jupiter-engine:${rootProject.ext.junitVersion}"
+    testCompile 'org.hamcrest:java-hamcrest:2.0.0.0'
+    testCompile 'com.h2database:h2:1.3.176'
+}

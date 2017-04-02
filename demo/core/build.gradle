@@ -1,0 +1,13 @@
+evaluationDependsOn(parent.path)
+
+apply plugin: 'org.junit.platform.gradle.plugin'
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
+    compile 'info.vividcode.jdbi:transaction-decorator-api:0.1.0-SNAPSHOT'
+
+    testCompile "org.junit.jupiter:junit-jupiter-api:${rootProject.ext.junitVersion}"
+    testRuntime "org.junit.jupiter:junit-jupiter-engine:${rootProject.ext.junitVersion}"
+    testCompile 'org.hamcrest:java-hamcrest:2.0.0.0'
+    testCompile "com.nhaarman:mockito-kotlin:1.3.0"
+}
