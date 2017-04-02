@@ -1,7 +1,8 @@
 dependencies {
     compile project(':demo:core')
 
-    compile 'info.vividcode.jdbi:transaction-decorator-jdbi:0.1.0-SNAPSHOT'
+    compile "info.vividcode.jdbi:transaction-decorator-jdbi:${demo_transaction_decorator_version}"
+
     compile "io.dropwizard:dropwizard-jdbi:${dropwizard_version}"
 
     testCompile "org.junit.jupiter:junit-jupiter-api:${rootProject.ext.junitVersion}"

@@ -4,7 +4,7 @@ apply plugin: 'org.junit.platform.gradle.plugin'
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
-    compile 'info.vividcode.jdbi:transaction-decorator-api:0.1.0-SNAPSHOT'
+    compile "info.vividcode.jdbi:transaction-decorator-api:${demo_transaction_decorator_version}"
 
     testCompile "org.junit.jupiter:junit-jupiter-api:${rootProject.ext.junitVersion}"
     testRuntime "org.junit.jupiter:junit-jupiter-engine:${rootProject.ext.junitVersion}"
