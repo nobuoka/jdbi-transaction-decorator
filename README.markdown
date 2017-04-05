@@ -88,7 +88,7 @@ TransactionDecorator transactionDecorator = new JdbiTransactionDecorator(sqlObje
 This project contains the demo as sub project.
 See [demo project](./demo/).
 
-## Why not using the `Transaction` annotation of jDBI directory?
+## Why not using the `Transaction` annotation of jDBI directly?
 
 To enable `Transaction` annotation of jDBI, application service must depends on jDBI and
 must be instantiated by jDBI.
